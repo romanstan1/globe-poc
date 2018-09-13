@@ -2,10 +2,10 @@ import * as d3 from 'd3'
 import * as d3_queue from 'd3-queue'
 import * as topojson from 'topojson'
 
-const width = window.screen.width
-// const height = window.screen.height
-// const width = 500
-const height = 500
+const width = window.innerWidth
+const height = window.innerHeight
+// const width = 600
+// const height = 500
 const config = {
   speed: 0.0,
   verticalTilt: -30,
@@ -14,12 +14,17 @@ const config = {
 // let locations = []
 let svg, markerGroup
 
-let projection, initialScale, path, center, zoom
+let projection, initialScale, path, center, locations
 
 export function init() {
     svg = d3.select('svg').attr('width', width).attr('height', height)
     markerGroup = svg.append('g')
     projection = d3.geoOrthographic()
+    // .scale(245)
+     // .rotate([0, 0])
+     .translate([width / 2, (height / 2) - 20])
+     // .clipAngle(90)
+
     initialScale = projection.scale()
     path = d3.geoPath().projection(projection)
     center = [width/2, height/2]
@@ -27,38 +32,27 @@ export function init() {
     drawGlobe()
     drawGraticule()
     enableRotation()
-    performZoom()
 }
 
 function drawGlobe() {
     d3_queue.queue()
-    // .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')
     .defer(d3.json, 'world.json')
-    // .defer(d3.json, 'locations.json')
     .await((error, worldData) => {
-        // console.log('locationData', locationData)
         svg.selectAll(".segment")
         .data(topojson.feature(worldData, worldData.objects.countries).features)
         .enter().append("path")
         .attr("class", "segment")
         .attr("d", path )
-        .style("stroke", "#888")
+        .style("stroke", "#fff")
         .style("stroke-width", "1px")
-        .style("fill", (d, i) => '#e5e5e5')
-        .style("opacity", ".6");
-        // locations = locationData;
-        // drawMarkers()
+        .style("fill", (d, i) => '#2d323a')
+        // .style("opacity", ".9");
     })
 }
 
-
-function performZoom() {
-    // zoom = d3.behavior.zoom(true)
-    // .translate(projection.origin())
-    // .scale(projection.scale())
-    // .scaleExtent([100, 800])
-    // .on("zoom", move);
-}
+var zoom = d3.zoom()
+	.scaleExtent([0.75, 50]) //bound zoom
+	.on("zoom", zoomed);
 
 function drawGraticule() {
     const graticule = d3.geoGraticule().step([10, 10])
@@ -67,42 +61,37 @@ function drawGraticule() {
         .datum(graticule)
         .attr("class", "graticule")
         .attr("d", path)
-        .style("fill", "#fff")
-        .style("stroke", "#ccc");
+        // .style("fill", "#fff")
+        .style("stroke", "#424851");
 }
 
-function move() {
-    console.log('event', d3.event)
-    // if(d3.event){
-    //     var origin = [d3.event.translate[0] * -1, d3.event.translate[1]];
-    //
-    //     projection.scale(scale);
-    //     path.pointRadius(2 * scale / scale0);
-    //
-    //     projection.origin(origin);
-    //     circle.origin(origin);
-    //
-    //     //globe and stars spin in the opposite direction because of the projection mode
-    //     var spaceOrigin = [origin[0] * -1, origin[1] * -1];
-    //     space.origin(spaceOrigin);
-    //     redraw();
-    // }
-}
+var scl = Math.min(width, height)/2;
 
+function zoomed() {
+  projection.scale(d3.event.transform.translate(projection).k * scl)
+  svg.selectAll("path").attr("d", path)
+  if(!!locations) drawMarkers()
+}
 
 function enableRotation() {
-    // d3.timer((elapsed) => {
-    //     projection.rotate([config.speed * elapsed - 120, config.verticalTilt, config.horizontalTilt])
-    //     svg.selectAll("path").attr("d", path)
-    //     drawMarkers()
-    // })
+    const sens = 0.25
 
-    projection.rotate([config.speed * 1 - 120, config.verticalTilt, config.horizontalTilt])
-    svg.selectAll("path").attr("d", path)
-    // drawMarkers()
+    svg
+    .call(d3.drag()
+     .subject(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
+     .on("drag", function() {
+       var rotate = projection.rotate();
+       projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
+       svg.selectAll("path").attr("d", path)
+       // svg.selectAll(".focused").classed("focused", focused = false);
+       if(!!locations) drawMarkers()
+     }))
+     .call(zoom)
+     // projection.rotate([config.speed * 1 - 120, config.verticalTilt, config.horizontalTilt])
 }
 
-export function drawMarkers(locations) {
+export function drawMarkers(locationData) {
+    if(!!locationData) locations = locationData
     const markers = markerGroup.selectAll('circle').data(locations)
     markers
         .enter()
@@ -113,11 +102,16 @@ export function drawMarkers(locations) {
         .attr('fill', d => {
             const coordinate = [d.longitude, d.latitude]
             const gdistance = d3.geoDistance(coordinate, projection.invert(center))
-            return gdistance > 1.57 ? 'none' : 'steelblue';
+            return gdistance > 1.52 ? 'none' : '#003bff'
         })
-        .attr('r', 7);
+        .attr('r', d => {
+            const coordinate = [d.longitude, d.latitude]
+            const gdistance = d3.geoDistance(coordinate, projection.invert(center))
+            const size = 8 - Math.pow(gdistance, 4)
+            return size
+        })
 
     markerGroup.each(function () {
         this.parentNode.appendChild(this);
-    });
+    })
 }

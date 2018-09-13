@@ -2,7 +2,7 @@ import {ADD_NOTE} from './actions'
 
 export const initialState = {
   notes: [
-    {latitude: 35.907757, longitude: 127.766922},
+    // {latitude: 35.907757, longitude: 127.766922},
   ]
 }
 

@@ -27,8 +27,8 @@ export default class InputLocation extends Component {
             <label>Long</label>
             <input type="text" value={longitude} data-type='longitude' onChange={this.handleInput}/>
           </div>
+          <div className='add-location' onClick={this.handleAdd}> Add </div>
         </div>
-        <div className='add-location' onClick={this.handleAdd}> Add </div>
       </Fragment>
     )
   }

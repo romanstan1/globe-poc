@@ -8,6 +8,7 @@ import {addNote} from 'store/modules/action-creators'
 class Home extends Component {
   componentDidMount() {
     init()
+    // drawMarkers(nextProps.notes)
   }
   componentWillReceiveProps(nextProps) {
     drawMarkers(nextProps.notes)

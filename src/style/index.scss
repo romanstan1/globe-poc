@@ -1,28 +1,38 @@
-body {
+html, body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  height: 100%; overflow: hidden
 }
+// html, body {margin: 0; height: 100%; overflow: hidden}
 
 div.Home {
   position: relative;
   height: 100vh;
+  background: black;
   > svg {
-    top: 50%;
-    transform: translateY(-50%);
-    position: absolute;
     path.graticule {
-      position: absolute;
-      top: 20px;
+      // top: 50%;
+      // transform: translateY(-50%);
+      // position: absolute;
+      // position: absolute;
+      // top: 20px;
+    }
+    path {
+      // fill: black;
     }
   }
   div.input-location {
     z-index: 10;
-    padding-top: 15px;
+    position: absolute;
+    margin-top: 50px;
+    bottom: 35px;
+    left: 35px;
     > div {
+      display: inline-block;
       height: 30px;
       label {
-        width: 80px;
+        width: 30px;
         display: inline-block;
         text-align: right;
         font-size: 14px;
@@ -35,24 +45,23 @@ div.Home {
         margin: 5px;
       }
     }
-  }
-
-  div.add-location {
-    margin-left: 87px;
-    margin-top: 10px;
-    text-align: center;
-    width: 80px;
-    // height: 25px;
-    // line-height: 25px;
-    padding: 8px 12px;
-    text-transform: uppercase;
-    font-size: 13px;
-    color: white;
-    background: navy;
-    cursor: pointer;
-    z-index: 10;
-    &:hover {
-      opacity: 0.8;
+    div.add-location {
+      margin-left: 10px;
+      margin-top: 0px;
+      text-align: center;
+      width: 80px;
+      height: 25px;
+      line-height: 25px;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: white;
+      background: navy;
+      cursor: pointer;
+      z-index: 10;
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
+
 }
