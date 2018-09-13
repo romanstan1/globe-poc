@@ -17,6 +17,7 @@ div.Home {
     }
   }
   div.input-location {
+    z-index: 10;
     padding-top: 15px;
     > div {
       height: 30px;
@@ -41,13 +42,15 @@ div.Home {
     margin-top: 10px;
     text-align: center;
     width: 80px;
-    height: 25px;
-    line-height: 25px;
+    // height: 25px;
+    // line-height: 25px;
+    padding: 8px 12px;
     text-transform: uppercase;
     font-size: 13px;
     color: white;
     background: navy;
     cursor: pointer;
+    z-index: 10;
     &:hover {
       opacity: 0.8;
     }

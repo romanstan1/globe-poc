@@ -1,28 +1,9 @@
-import uuidv1 from 'uuid/v1'
 
-import {ADD_TO_DO} from './actions'
-import {DELETE_TO_DO} from './actions'
+import {ADD_NOTE} from './actions'
 
-export const addToDo = (text) => {
-  return dispatch => dispatch({
-    type: ADD_TO_DO,
-    payload: {
-      id: uuidv1(),
-      task: text.length? text: 'Default text',
-      done: false
-    }
+export const addNote = (latitude, longitude) => dispatch => {
+  return dispatch({
+    type: ADD_NOTE,
+    payload: { latitude, longitude }
   })
-}
-
-export const deleteToDo = id => dispatch => {
-
-  console.log('deleteToDo')
-  setTimeout(()=> {
-    console.log('do sutin')
-    return dispatch({
-      type: DELETE_TO_DO,
-      payload: id
-    })
-  }, 1000)
-
 }

@@ -103,9 +103,7 @@ function enableRotation() {
 }
 
 export function drawMarkers(locations) {
-    console.log('drawMarkers',locations )
-    const markers = markerGroup.selectAll('circle')
-        .data(locations)
+    const markers = markerGroup.selectAll('circle').data(locations)
     markers
         .enter()
         .append('circle')
