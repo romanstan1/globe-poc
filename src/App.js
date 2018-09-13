@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
-import {init} from './d3-module.js'
+import React, { Component, Fragment} from 'react';
+import {Route,Switch} from 'react-router-dom'
+import Home from './components/Home'
+import './style/index.css';
+
 class App extends Component {
-  componentDidMount() {
-    init()
-  }
   render() {
     return (
-      <div className="App">
-        <svg></svg>
-      </div>
-    );
+      <Fragment>
+        <Switch>
+          <Route exact path="/" component={Home}/>
+          <Route component={Home}/>
+        </Switch>
+      </Fragment>
+    )
   }
 }
 

@@ -4,10 +4,10 @@ body {
   font-family: sans-serif;
 }
 
-div.App {
+div.Home {
   position: relative;
   height: 100vh;
-  svg {
+  > svg {
     top: 50%;
     transform: translateY(-50%);
     position: absolute;
@@ -16,5 +16,40 @@ div.App {
       top: 20px;
     }
   }
+  div.input-location {
+    padding-top: 15px;
+    > div {
+      height: 30px;
+      label {
+        width: 80px;
+        display: inline-block;
+        text-align: right;
+        font-size: 14px;
+      }
+      input {
+        width: 80px;
+        line-height: 20px;
+        outline: none;
+        text-indent: 5px;
+        margin: 5px;
+      }
+    }
+  }
 
+  div.add-location {
+    margin-left: 87px;
+    margin-top: 10px;
+    text-align: center;
+    width: 80px;
+    height: 25px;
+    line-height: 25px;
+    text-transform: uppercase;
+    font-size: 13px;
+    color: white;
+    background: navy;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 }

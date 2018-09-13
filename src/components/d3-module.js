@@ -11,7 +11,7 @@ const config = {
   verticalTilt: -30,
   horizontalTilt: 0
 }
-let locations = []
+// let locations = []
 let svg, markerGroup
 
 let projection, initialScale, path, center, zoom
@@ -34,9 +34,9 @@ function drawGlobe() {
     d3_queue.queue()
     // .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')
     .defer(d3.json, 'world.json')
-    .defer(d3.json, 'locations.json')
-    .await((error, worldData, locationData) => {
-        console.log('locationData', locationData)
+    // .defer(d3.json, 'locations.json')
+    .await((error, worldData) => {
+        // console.log('locationData', locationData)
         svg.selectAll(".segment")
         .data(topojson.feature(worldData, worldData.objects.countries).features)
         .enter().append("path")
@@ -46,8 +46,8 @@ function drawGlobe() {
         .style("stroke-width", "1px")
         .style("fill", (d, i) => '#e5e5e5')
         .style("opacity", ".6");
-        locations = locationData;
-        drawMarkers()
+        // locations = locationData;
+        // drawMarkers()
     })
 }
 
@@ -99,10 +99,11 @@ function enableRotation() {
 
     projection.rotate([config.speed * 1 - 120, config.verticalTilt, config.horizontalTilt])
     svg.selectAll("path").attr("d", path)
-    drawMarkers()
+    // drawMarkers()
 }
 
-function drawMarkers() {
+export function drawMarkers(locations) {
+    console.log('drawMarkers',locations )
     const markers = markerGroup.selectAll('circle')
         .data(locations)
     markers
