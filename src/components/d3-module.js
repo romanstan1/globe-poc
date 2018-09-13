@@ -16,6 +16,10 @@ let svg, markerGroup
 
 let projection, initialScale, path, center, locations
 
+let london = [-0.118667702475932, 51.5019405883275];
+
+let lineToLondon
+
 export function init() {
     svg = d3.select('svg').attr('width', width).attr('height', height)
     markerGroup = svg.append('g')
@@ -32,6 +36,7 @@ export function init() {
     drawGlobe()
     drawGraticule()
     enableRotation()
+
 }
 
 function drawGlobe() {
@@ -43,7 +48,7 @@ function drawGlobe() {
         .enter().append("path")
         .attr("class", "segment")
         .attr("d", path )
-        .style("stroke", "#fff")
+        .style("stroke", "#edeff4")
         .style("stroke-width", "1px")
         .style("fill", (d, i) => '#2d323a')
         // .style("opacity", ".9");
@@ -62,7 +67,7 @@ function drawGraticule() {
         .attr("class", "graticule")
         .attr("d", path)
         // .style("fill", "#fff")
-        .style("stroke", "#424851");
+        // .style("stroke", "#424851");
 }
 
 var scl = Math.min(width, height)/2;
@@ -91,6 +96,9 @@ function enableRotation() {
 }
 
 export function drawMarkers(locationData) {
+    lineToLondon = (r) => {
+        return path({"type": "LineString", "coordinates": [london, [r.longitude, r.latitude] ]});
+    }
     if(!!locationData) locations = locationData
     const markers = markerGroup.selectAll('circle').data(locations)
     markers
@@ -110,6 +118,20 @@ export function drawMarkers(locationData) {
             const size = 8 - Math.pow(gdistance, 4)
             return size
         })
+        .attr("d", (d) => lineToLondon(d))
+
+    svg
+        .append("g")
+        .attr("class","lines")
+        .selectAll(".lines")
+        .data(locations)
+        .enter()
+        .append("path")
+        .attr("class", "lines")
+        .style("stroke", "#a8217d")
+        .style("stroke-width", "1px")
+        .attr("fill", "none")
+        .attr("d", d => lineToLondon(d))
 
     markerGroup.each(function () {
         this.parentNode.appendChild(this);
