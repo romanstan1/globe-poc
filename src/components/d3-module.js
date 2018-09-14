@@ -48,9 +48,9 @@ function drawGlobe() {
         .enter().append("path")
         .attr("class", "segment")
         .attr("d", path )
-        .style("stroke", "#edeff4")
+        .style("stroke", "#2f6674")
         .style("stroke-width", "1px")
-        .style("fill", (d, i) => '#2d323a')
+        .style("fill", (d, i) => '#073e57')
         // .style("opacity", ".9");
     })
 }
@@ -66,8 +66,8 @@ function drawGraticule() {
         .datum(graticule)
         .attr("class", "graticule")
         .attr("d", path)
-        // .style("fill", "#fff")
-        // .style("stroke", "#424851");
+        .style("fill", "#011626")
+        .style("stroke", "#083038");
 }
 
 var scl = Math.min(width, height)/2;
